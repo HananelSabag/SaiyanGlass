@@ -1,0 +1,62 @@
+﻿{
+    "label":  "windhawk-liquidglass",
+    "when":  "2026-10-30T15:58:22",
+    "build":  "26300",
+    "cores":  12,
+    "results":  [
+                    {
+                        "scenario":  "idle",
+                        "seconds":  45,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  142.3,
+                                              "privateDeltaMB":  -0.1,
+                                              "wsMB":  315.2,
+                                              "handles":  2020,
+                                              "handleDelta":  -12,
+                                              "threads":  59
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  4.47,
+                                              "privateMB":  583.9,
+                                              "privateDeltaMB":  0.5,
+                                              "wsMB":  136.9,
+                                              "handles":  2239,
+                                              "handleDelta":  13,
+                                              "threads":  67
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  147.9,
+                                              "privateDeltaMB":  -0.1,
+                                              "wsMB":  217.8,
+                                              "handles":  1394,
+                                              "handleDelta":  -29,
+                                              "threads":  41
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  82.1,
+                                              "privateDeltaMB":  -0.2,
+                                              "wsMB":  151.7,
+                                              "handles":  1148,
+                                              "handleDelta":  -8,
+                                              "threads":  24
+                                          }
+                                      ]
+                    }
+                ]
+}
