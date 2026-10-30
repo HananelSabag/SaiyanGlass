@@ -187,9 +187,10 @@ public static class GlassIcons {
         WriteIcoFile(path, sizes, pngs);
     }
 
-    // A fully transparent icon in the classic format: empty color bits and an
-    // AND mask that keeps everything underneath. Explorer draws the shortcut
-    // overlay through the mask, so a PNG blank icon shows up as a black square.
+    // An invisible icon for the shortcut overlay. An icon with no alpha at all
+    // is drawn through its mask with plain GDI, which wipes the desktop's alpha
+    // under it and leaves a hole down to the wallpaper. One pixel at alpha 1
+    // (invisible) makes Windows alpha-blend it instead, which changes nothing.
     public static void WriteBlankIco(string path) {
         int[] sizes = { 256, 64, 48, 32, 24, 16 };
         var images = new byte[sizes.Length][];
@@ -199,7 +200,9 @@ public static class GlassIcons {
             using (var w = new BinaryWriter(ms)) {
                 w.Write(40); w.Write(s); w.Write(s * 2); w.Write((short)1); w.Write((short)32);
                 w.Write(0); w.Write(s * s * 4 + maskStride * s); w.Write(0); w.Write(0); w.Write(0); w.Write(0);
-                w.Write(new byte[s * s * 4]);
+                var color = new byte[s * s * 4];
+                color[3] = 1;
+                w.Write(color);
                 var mask = new byte[maskStride * s];
                 for (int k = 0; k < mask.Length; k++) mask[k] = 0xFF;
                 w.Write(mask);
