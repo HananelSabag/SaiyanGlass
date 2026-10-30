@@ -22,7 +22,12 @@ $controlStyles = @(
     # Darker glass behind text-heavy capsules so clock, language and weather read well.
     @{ target = 'StackPanel#SystemTrayFrameGrid, Grid#SystemTrayFrameGrid'; styles = @("Background:=$glassPill") },
     # Weather capsule sized to its icon, temperature and description.
-    @{ target = 'Taskbar.AugmentedEntryPointButton#AugmentedEntryPointButton > Taskbar.TaskListButtonPanel#ExperienceToggleButtonRootPanel'; styles = @("Background:=$glassPill", 'MinWidth=56', 'MaxWidth=240', 'Margin=-620,0,0,0') },
+    # Weather mirrors the tray: 12 px from the left edge. The dock is centered, so
+    # the weather's slot starts at (taskbar width - dock width) / 2 + 41 (dock padding).
+    # Its large negative margin also keeps it out of the dock's own width, so the
+    # two values never feed back into each other.
+    @{ target = 'Taskbar.TaskbarFrame > Grid#RootGrid'; styles = @('ActualWidth=>sgDockWidth') },
+    @{ target = 'Taskbar.AugmentedEntryPointButton#AugmentedEntryPointButton > Taskbar.TaskListButtonPanel#ExperienceToggleButtonRootPanel'; styles = @("Background:=$glassPill", 'MinWidth=56', 'MaxWidth=240', 'Margin={{-((containerGridWidth-sgDockWidth)/2+29)}},0,0,0') },
     @{ target = 'Windows.UI.Xaml.Controls.Grid#AugmentedEntryPointContentGrid'; styles = @('Margin=10,0,14,0', 'HorizontalAlignment=Left') },
     # A glass bubble around every app icon, and around Start / Task View.
     @{ target = 'Grid#IconPanel@CommonStates > Border#BackgroundElement, Taskbar.TaskListLabeledButtonPanel@CommonStates > Border#BackgroundElement'; styles = $bubbleStyles },
@@ -38,18 +43,8 @@ for ($i = 0; $i -lt $controlStyles.Count; $i++) {
 $key.Close()
 $mod = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("$root\windows-11-taskbar-styler", $true); $mod.SetValue('SettingsChangeTime', $now, 'DWord'); $mod.Close()
 
-# Window glass only for File Explorer (explorer.exe), with the system acrylic
-# backdrop and no accent-colored controls; every other app keeps its normal look.
-$tws = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("$root\translucent-windows\Settings", $true)
-$tws.SetValue('RenderingMod.ThemeBackground', 1, 'DWord')
-$tws.SetValue('RenderingMod.SysColors', 0, 'DWord')
-$tws.SetValue('RenderingMod.AccentColorControls', 0, 'DWord')
-$tws.SetValue('BackgroundEffects.type', 'acrylicsystem', 'String')
-$tws.SetValue('FlyoutsEffects', 1, 'DWord')
-$tws.Close()
+# Translucent Windows made File Explorer flat gray with black bars: off.
 $tw = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("$root\translucent-windows", $true)
-$tw.SetValue('IncludeCustom', 'explorer.exe', 'String')
-$tw.SetValue('IncludeExcludeCustomOnly', 1, 'DWord')
-$tw.SetValue('Disabled', 0, 'DWord')
+$tw.SetValue('Disabled', 1, 'DWord')
 $tw.SetValue('SettingsChangeTime', $now, 'DWord')
 $tw.Close()
