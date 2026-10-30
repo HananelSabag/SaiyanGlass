@@ -1,0 +1,4 @@
+out/
+prototype/.cache/
+prototype/wallpapers.local.js
+*.pdb

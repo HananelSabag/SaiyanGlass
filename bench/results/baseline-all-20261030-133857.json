@@ -1,0 +1,278 @@
+﻿{
+    "label":  "baseline",
+    "when":  "2026-10-30T13:38:57",
+    "build":  "26300",
+    "cores":  12,
+    "results":  [
+                    {
+                        "scenario":  "idle",
+                        "seconds":  60,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  0.21,
+                                              "cpuMsPerSec":  25.26,
+                                              "gpu3dMsPerSec":  0.04,
+                                              "privateMB":  422.7,
+                                              "privateDeltaMB":  -1.5,
+                                              "wsMB":  482.7,
+                                              "handles":  5790,
+                                              "handleDelta":  -275,
+                                              "threads":  151
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  3.35,
+                                              "privateMB":  263.8,
+                                              "privateDeltaMB":  44.5,
+                                              "wsMB":  103.3,
+                                              "handles":  1960,
+                                              "handleDelta":  -9,
+                                              "threads":  59
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  154.1,
+                                              "privateDeltaMB":  0,
+                                              "wsMB":  200.6,
+                                              "handles":  1343,
+                                              "handleDelta":  -8,
+                                              "threads":  31
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  83.1,
+                                              "privateDeltaMB":  0,
+                                              "wsMB":  131.5,
+                                              "handles":  1134,
+                                              "handleDelta":  -3,
+                                              "threads":  21
+                                          }
+                                      ]
+                    },
+                    {
+                        "scenario":  "start-open-close-x10",
+                        "seconds":  20.2,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  0.966,
+                                              "cpuMsPerSec":  115.89,
+                                              "gpu3dMsPerSec":  0.15,
+                                              "privateMB":  423.3,
+                                              "privateDeltaMB":  0.6,
+                                              "wsMB":  484.1,
+                                              "handles":  5917,
+                                              "handleDelta":  127,
+                                              "threads":  156
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  66.52,
+                                              "privateMB":  276.2,
+                                              "privateDeltaMB":  12.5,
+                                              "wsMB":  103.8,
+                                              "handles":  1968,
+                                              "handleDelta":  8,
+                                              "threads":  60
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  2.942,
+                                              "cpuMsPerSec":  353.08,
+                                              "gpu3dMsPerSec":  0.19,
+                                              "privateMB":  168.3,
+                                              "privateDeltaMB":  14.2,
+                                              "wsMB":  219.9,
+                                              "handles":  1441,
+                                              "handleDelta":  98,
+                                              "threads":  46
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0.644,
+                                              "cpuMsPerSec":  77.26,
+                                              "gpu3dMsPerSec":  0.07,
+                                              "privateMB":  87.8,
+                                              "privateDeltaMB":  4.7,
+                                              "wsMB":  149.5,
+                                              "handles":  1448,
+                                              "handleDelta":  314,
+                                              "threads":  52
+                                          }
+                                      ]
+                    },
+                    {
+                        "scenario":  "maximize-restore-x10",
+                        "seconds":  14.2,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  0.192,
+                                              "cpuMsPerSec":  23.03,
+                                              "gpu3dMsPerSec":  0.07,
+                                              "privateMB":  422.9,
+                                              "privateDeltaMB":  -0.4,
+                                              "wsMB":  483.9,
+                                              "handles":  5884,
+                                              "handleDelta":  -43,
+                                              "threads":  150
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  15.81,
+                                              "privateMB":  299.3,
+                                              "privateDeltaMB":  23,
+                                              "wsMB":  104.5,
+                                              "handles":  1971,
+                                              "handleDelta":  0,
+                                              "threads":  60
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  0.009,
+                                              "cpuMsPerSec":  1.1,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  169.5,
+                                              "privateDeltaMB":  -1.5,
+                                              "wsMB":  217.7,
+                                              "handles":  1424,
+                                              "handleDelta":  -17,
+                                              "threads":  45
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  87.5,
+                                              "privateDeltaMB":  -0.3,
+                                              "wsMB":  149,
+                                              "handles":  1429,
+                                              "handleDelta":  -19,
+                                              "threads":  48
+                                          }
+                                      ]
+                    },
+                    {
+                        "scenario":  "window-move-10s",
+                        "seconds":  10,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  0.557,
+                                              "cpuMsPerSec":  66.9,
+                                              "gpu3dMsPerSec":  0.28,
+                                              "privateMB":  422.9,
+                                              "privateDeltaMB":  0,
+                                              "wsMB":  483.9,
+                                              "handles":  5884,
+                                              "handleDelta":  0,
+                                              "threads":  150
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0.77,
+                                              "privateMB":  300.3,
+                                              "privateDeltaMB":  1,
+                                              "wsMB":  104.6,
+                                              "handles":  1972,
+                                              "handleDelta":  2,
+                                              "threads":  60
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  169.5,
+                                              "privateDeltaMB":  0,
+                                              "wsMB":  217.5,
+                                              "handles":  1424,
+                                              "handleDelta":  0,
+                                              "threads":  45
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  87.5,
+                                              "privateDeltaMB":  0,
+                                              "wsMB":  149,
+                                              "handles":  1429,
+                                              "handleDelta":  0,
+                                              "threads":  48
+                                          }
+                                      ]
+                    },
+                    {
+                        "scenario":  "wallpaper-advance-x3",
+                        "seconds":  18.1,
+                        "processes":  [
+                                          {
+                                              "process":  "explorer",
+                                              "cpuPctOfMachine":  1.132,
+                                              "cpuMsPerSec":  135.88,
+                                              "gpu3dMsPerSec":  1.86,
+                                              "privateMB":  498.1,
+                                              "privateDeltaMB":  75.2,
+                                              "wsMB":  511.6,
+                                              "handles":  5814,
+                                              "handleDelta":  -68,
+                                              "threads":  150
+                                          },
+                                          {
+                                              "process":  "dwm",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  51.28,
+                                              "privateMB":  304.6,
+                                              "privateDeltaMB":  1.6,
+                                              "wsMB":  104.6,
+                                              "handles":  1970,
+                                              "handleDelta":  1,
+                                              "threads":  60
+                                          },
+                                          {
+                                              "process":  "StartMenuExperienceHost",
+                                              "cpuPctOfMachine":  0.007,
+                                              "cpuMsPerSec":  0.87,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  169.4,
+                                              "privateDeltaMB":  -0.1,
+                                              "wsMB":  217.4,
+                                              "handles":  1415,
+                                              "handleDelta":  -9,
+                                              "threads":  44
+                                          },
+                                          {
+                                              "process":  "SearchHost",
+                                              "cpuPctOfMachine":  0,
+                                              "cpuMsPerSec":  0,
+                                              "gpu3dMsPerSec":  0,
+                                              "privateMB":  87.5,
+                                              "privateDeltaMB":  -0.2,
+                                              "wsMB":  148.9,
+                                              "handles":  1425,
+                                              "handleDelta":  -2,
+                                              "threads":  48
+                                          }
+                                      ]
+                    }
+                ]
+}
