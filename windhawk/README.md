@@ -1,29 +1,50 @@
-﻿# Windhawk setup (current look)
+﻿# The look (Windhawk + desktop icons)
 
-The look on this PC comes from three Windhawk mods. These scripts write their
-settings (Windhawk keeps them under HKLM, so run elevated):
+One command applies everything, asking once for elevation (Windhawk keeps mod
+settings under HKLM):
 
-1. `apply-liquid-glass.ps1` - LiquidGlass theme for the Taskbar Styler and the Start Menu Styler.
-2. `tune-taskbar.ps1` - on top of the theme: tray on the right edge, darker glass
-   (70%) behind the weather and tray text so white text reads on white wallpapers
-   too, semibold text, a glass bubble around each app icon, and the weather
-   capsule mirrored to the left edge. Run it as:
+```powershell
+.\apply-look.ps1            # from the repo root
+.\apply-look.ps1 -Restore   # puts the original desktop icons back
+```
 
-   ```powershell
-   .\tune-taskbar.ps1 -Mode final -WeatherShift '{{329.5-(containerGridWidth-sgRepW)/2}}'
-   ```
+Re-run it when a Windows or app update resets something. The output goes to
+`%TEMP%\saiyanglass-apply.log`.
 
-   The shift follows the dock width, so the weather stays 12px from the left as
-   apps open and close. `-Mode debug` prints the layout widths in the clock if it
-   ever needs recalibrating (the 329.5 was measured on a 2560px-wide screen).
+## Pieces
+
+- `glass.ps1` - the shared glass: dark glass (70% tint) behind anything with
+  text, so white text reads on white wallpapers too, and light bubbles for items.
+  Also `Set-WindhawkMod`, which writes a mod's settings and makes it reload.
+- `apply-liquid-glass.ps1` - LiquidGlass2 theme for the Taskbar Styler and the
+  Start Menu Styler.
+- `tune-taskbar.ps1` - on top of the theme: tray on the right edge, dark glass
+  and semibold text behind the clock, language and weather, a glass bubble around
+  each app icon, the weather mirrored to the left edge, darker menus, tooltips
+  and window previews, and fixes for two theme bugs that paint the keyboard
+  layout panel and the snap layout suggestions red. The weather shift follows
+  the dock width, so it stays 12px from the left as apps open and close;
+  `-Mode debug` prints the layout widths in the clock if it ever needs
+  recalibrating (the 329.5 in the default `-WeatherShift` was measured on a
+  2560px-wide screen).
+- `tune-shell.ps1` - File Explorer Styler (LiquidGlass theme, acrylic over the
+  whole window, glass right-click menu, also on the desktop) and Notification
+  Center Styler (LiquidGlass, dark glass panels with light item bubbles).
+- `..\desktop\desktop-icons.ps1` - every desktop shortcut and folder, and the
+  Recycle Bin, on a glass bubble; the shortcut arrow hidden. The icons are
+  rendered once into `%LOCALAPPDATA%\SaiyanGlass\desktop-icons` (with the
+  originals and a backup of every changed setting), so nothing runs afterwards.
+  Loose files keep their own icons. A program update can rewrite its shortcut;
+  re-run to put it back on glass.
 
 Translucent Windows (window glass) is installed but disabled: it made File
 Explorer flat gray with black bars.
 
-Undo: disable the mod in Windhawk, or uninstall Windhawk. Nothing outside
-Windhawk's own settings is changed.
+Undo the Windhawk part by disabling the mods in Windhawk, or uninstalling it.
 
-Idle cost measured on this PC (taskbar explorer process): ~0.1-0.2% CPU, the same
-range as before any mod (0.18% after the final taskbar tuning); Windhawk itself
-0% CPU, ~15 MB per process.
+## Cost
 
+Measured on this PC: explorer idles at 0.05-0.2% CPU, the same range as before
+any mod (applying the desktop icons rebuilds the icon cache, about a minute of
+~1%); Windhawk 0% CPU, ~15 MB per process; ShellExperienceHost, ShellHost and
+Start 0% at idle.
