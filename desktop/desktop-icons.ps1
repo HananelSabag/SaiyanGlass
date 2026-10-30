@@ -184,16 +184,43 @@ public static class GlassIcons {
                 using (var ms = new MemoryStream()) { s.Save(ms, ImageFormat.Png); pngs[i] = ms.ToArray(); }
             }
         }
+        WriteIcoFile(path, sizes, pngs);
+    }
+
+    // A fully transparent icon in the classic format: empty color bits and an
+    // AND mask that keeps everything underneath. Explorer draws the shortcut
+    // overlay through the mask, so a PNG blank icon shows up as a black square.
+    public static void WriteBlankIco(string path) {
+        int[] sizes = { 256, 64, 48, 32, 24, 16 };
+        var images = new byte[sizes.Length][];
+        for (int i = 0; i < sizes.Length; i++) {
+            int s = sizes[i], maskStride = (s + 31) / 32 * 4;
+            using (var ms = new MemoryStream())
+            using (var w = new BinaryWriter(ms)) {
+                w.Write(40); w.Write(s); w.Write(s * 2); w.Write((short)1); w.Write((short)32);
+                w.Write(0); w.Write(s * s * 4 + maskStride * s); w.Write(0); w.Write(0); w.Write(0); w.Write(0);
+                w.Write(new byte[s * s * 4]);
+                var mask = new byte[maskStride * s];
+                for (int k = 0; k < mask.Length; k++) mask[k] = 0xFF;
+                w.Write(mask);
+                w.Flush();
+                images[i] = ms.ToArray();
+            }
+        }
+        WriteIcoFile(path, sizes, images);
+    }
+
+    static void WriteIcoFile(string path, int[] sizes, byte[][] images) {
         using (var w = new BinaryWriter(File.Create(path))) {
             w.Write((short)0); w.Write((short)1); w.Write((short)sizes.Length);
             int offset = 6 + 16 * sizes.Length;
             for (int i = 0; i < sizes.Length; i++) {
                 byte dim = (byte)(sizes[i] >= 256 ? 0 : sizes[i]);
                 w.Write(dim); w.Write(dim); w.Write((byte)0); w.Write((byte)0);
-                w.Write((short)1); w.Write((short)32); w.Write(pngs[i].Length); w.Write(offset);
-                offset += pngs[i].Length;
+                w.Write((short)1); w.Write((short)32); w.Write(images[i].Length); w.Write(offset);
+                offset += images[i].Length;
             }
-            foreach (var p in pngs) w.Write(p);
+            foreach (var image in images) w.Write(image);
         }
     }
 
@@ -383,7 +410,7 @@ if ($Restore) {
         $k = [Microsoft.Win32.Registry]::LocalMachine.CreateSubKey($shellIconsKey)
         if (-not $backup.ContainsKey('arrow')) { $backup['arrow'] = @{ value = $k.GetValue('29') } }
         $blank = Join-Path $store 'blank.ico'
-        if (-not (Test-Path $blank)) { $b = New-Object Drawing.Bitmap 256, 256; [GlassIcons]::WriteIco($b, $blank); $b.Dispose() }
+        [GlassIcons]::WriteBlankIco($blank)
         $k.SetValue('29', "$blank,0", 'String')
         $k.Close()
         'hidden   shortcut arrow'
