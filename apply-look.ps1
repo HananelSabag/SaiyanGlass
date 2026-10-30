@@ -16,10 +16,19 @@ function Show-Log {
 
 # Started from a packaged (MSIX) app such as the Claude desktop app, writes to
 # AppData and HKCU land in the app's private copy, even elevated, and Explorer
-# never sees them. Relaunch through Explorer, which runs outside any package.
-Add-Type -Namespace SaiyanGlass -Name Package -MemberDefinition '[DllImport("kernel32.dll", CharSet = CharSet.Unicode)] public static extern int GetCurrentPackageFullName(ref int length, System.Text.StringBuilder name);'
-$length = 0
-if ([SaiyanGlass.Package]::GetCurrentPackageFullName([ref]$length, $null) -ne 15700) {  # 15700: no package
+# never sees them. Such processes don't always report a package, so check where
+# a new folder actually lands, and if redirected, relaunch through Explorer,
+# which runs outside any package.
+function Test-Redirected {
+    $name = "saiyanglass-probe-$([guid]::NewGuid().ToString('N'))"
+    $probe = Join-Path $env:LOCALAPPDATA $name
+    New-Item -ItemType Directory $probe | Out-Null
+    $redirected = [bool](Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Packages') -Directory -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path (Join-Path $_.FullName "LocalCache\Local\$name") } | Select-Object -First 1)
+    Remove-Item $probe -Force
+    $redirected
+}
+if (Test-Redirected) {
     $cmd = Join-Path $env:TEMP 'saiyanglass-apply.cmd'
     Set-Content $cmd "@powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"$restoreArg" -Encoding ASCII
     Remove-Item $log -ErrorAction SilentlyContinue
