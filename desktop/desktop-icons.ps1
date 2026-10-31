@@ -4,11 +4,22 @@
 # afterwards. Runs elevated: the Public Desktop and the arrow are machine-wide.
 #   -Restore  puts every original icon back
 param([switch]$Restore)
+. "$PSScriptRoot\..\windhawk\glass.ps1"
 
 $store = Join-Path $env:LOCALAPPDATA 'SaiyanGlass\desktop-icons'
 # Part of each icon's file name: bump it when the bubble changes, so Explorer's
 # icon cache can't keep showing the old one.
-$design = 'v1'
+$design = 'v2'
+# The bubble from the tokens, at the 224px it has in the 256px icon.
+function Get-Alpha([string]$argb, [double]$scale = 1) { [Math]::Min(255, [int]([Convert]::ToInt32($argb.Substring(1, 2), 16) * $scale)) }
+$lift = $Tokens.DesktopLift
+$desktopBubble = @{
+    Top = Get-Alpha $Tokens.BubbleRest[0] $lift
+    Bottom = Get-Alpha $Tokens.BubbleRest[1] $lift
+    Rim = [int[]]@($Tokens.Rim | ForEach-Object { Get-Alpha $_[0] $lift })
+    RimOffsets = [float[]]@($Tokens.Rim | ForEach-Object { $_[1] })
+    Radius = [float](224 * $Tokens.RadiusItem / $Tokens.ItemSize)
+}
 $backupFile = Join-Path $store 'backup.json'
 $recycleBin = '{645FF040-5081-101B-9F08-00AA002F954E}'
 $recycleBinKey = "Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\$recycleBin\DefaultIcon"
@@ -122,10 +133,11 @@ public static class GlassIcons {
     }
 
     // The taskbar bubble at 256px: white glass with a bright top edge, a soft
-    // shadow and a dark hairline so it also reads on white wallpapers.
-    public static Bitmap Glass(Image icon) {
+    // shadow and a dark hairline so it also reads on white wallpapers. The
+    // alphas and the radius come from the tokens in glass.ps1.
+    public static Bitmap Glass(Image icon, int baseAlpha, int fillTop, int fillBottom, int sheen, int hairline, int[] rim, float[] rimOffsets, float radius) {
         const int S = 256;
-        const float radius = 62, iconSize = 148;
+        const float iconSize = 148;
         var r = new RectangleF(16, 12, 224, 224);
         var bmp = new Bitmap(S, S, PixelFormat.Format32bppArgb);
         using (var g = Graphics.FromImage(bmp))
@@ -144,26 +156,25 @@ public static class GlassIcons {
             g.CompositingMode = CompositingMode.SourceOver;
 
             var body = RectangleF.Inflate(r, 0, 1);
-            using (var b = new SolidBrush(Color.FromArgb(0x24, 0x0B, 0x0C, 0x10))) g.FillPath(b, bubble);
-            using (var b = new LinearGradientBrush(body, Color.FromArgb(0x40, 255, 255, 255), Color.FromArgb(0x14, 255, 255, 255), LinearGradientMode.Vertical))
+            using (var b = new SolidBrush(Color.FromArgb(baseAlpha, 0x0B, 0x0C, 0x10))) g.FillPath(b, bubble);
+            using (var b = new LinearGradientBrush(body, Color.FromArgb(fillTop, 255, 255, 255), Color.FromArgb(fillBottom, 255, 255, 255), LinearGradientMode.Vertical))
                 g.FillPath(b, bubble);
             g.SetClip(bubble);
-            var sheen = new RectangleF(r.X, r.Y, r.Width, r.Height * 0.5f);
-            using (var b = new LinearGradientBrush(RectangleF.Inflate(sheen, 0, 1), Color.FromArgb(0x30, 255, 255, 255), Color.FromArgb(0, 255, 255, 255), LinearGradientMode.Vertical))
-                g.FillRectangle(b, sheen);
+            var top = new RectangleF(r.X, r.Y, r.Width, r.Height * 0.5f);
+            using (var b = new LinearGradientBrush(RectangleF.Inflate(top, 0, 1), Color.FromArgb(sheen, 255, 255, 255), Color.FromArgb(0, 255, 255, 255), LinearGradientMode.Vertical))
+                g.FillRectangle(b, top);
             g.ResetClip();
 
             g.DrawImage(icon, new RectangleF(r.X + (r.Width - iconSize) / 2, r.Y + (r.Height - iconSize) / 2, iconSize, iconSize));
 
             using (var outer = Round(RectangleF.Inflate(r, 1, 1), radius + 1))
-            using (var pen = new Pen(Color.FromArgb(0x38, 0, 0, 0), 2))
+            using (var pen = new Pen(Color.FromArgb(hairline, 0, 0, 0), 2))
                 g.DrawPath(pen, outer);
             using (var inner = Round(RectangleF.Inflate(r, -1.5f, -1.5f), radius - 1.5f))
             using (var edge = new LinearGradientBrush(body, Color.White, Color.White, LinearGradientMode.Vertical)) {
-                edge.InterpolationColors = new ColorBlend {
-                    Colors = new[] { Color.FromArgb(0xB0, 255, 255, 255), Color.FromArgb(0x24, 255, 255, 255), Color.FromArgb(0x58, 255, 255, 255) },
-                    Positions = new[] { 0f, 0.45f, 1f }
-                };
+                var colors = new Color[rim.Length];
+                for (int i = 0; i < rim.Length; i++) colors[i] = Color.FromArgb(rim[i], 255, 255, 255);
+                edge.InterpolationColors = new ColorBlend { Colors = colors, Positions = rimOffsets };
                 using (var pen = new Pen(edge, 3)) g.DrawPath(pen, inner);
             }
         }
@@ -278,7 +289,7 @@ function New-GlassIcon([string]$id, [scriptblock]$render) {
     $ico = Join-Path $store "icons\$id-$design.ico"
     if (-not (Test-Path -LiteralPath $ico)) {
         $source = [Drawing.Image]::FromFile($original)
-        $glass = [GlassIcons]::Glass($source)
+        $glass = [GlassIcons]::Glass($source, $Tokens.DesktopBase, $desktopBubble.Top, $desktopBubble.Bottom, $Tokens.DesktopSheen, $Tokens.DesktopHairline, $desktopBubble.Rim, $desktopBubble.RimOffsets, $desktopBubble.Radius)
         [GlassIcons]::WriteIco($glass, $ico)
         $glass.Dispose()
         $source.Dispose()

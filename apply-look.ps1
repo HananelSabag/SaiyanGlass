@@ -48,8 +48,8 @@ if (-not $admin) {
 
 & {
     if (-not $Restore) {
-        & "$PSScriptRoot\windhawk\apply-liquid-glass.ps1"
         & "$PSScriptRoot\windhawk\tune-taskbar.ps1"
+        & "$PSScriptRoot\windhawk\tune-start.ps1"
         & "$PSScriptRoot\windhawk\tune-shell.ps1"
         'windhawk settings applied'
     }

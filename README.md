@@ -1,10 +1,33 @@
 # SaiyanGlass
 
-A liquid-glass taskbar that follows the wallpaper: each time the Dragon Ball
-slideshow changes, SaiyanGlass measures the new image and adjusts the glass so
-it picks up a hint of its color and the taskbar text stays readable.
+A liquid-glass look for Windows 11 that reads on every wallpaper of a Dragon
+Ball slideshow, white or dark: a glass dock with a bubble around each app,
+separate glass capsules, glass bubbles around items and desktop icons, and
+the same glass on Start, File Explorer, the menus and the quick settings.
 
-## How it works
+## The look (current)
+
+One design system, driven by one set of tokens (glass tint and blur, the rim,
+corner radii per element size, the item bubble, hover and pressed states, text
+weight) in [`windhawk/glass.ps1`](windhawk/glass.ps1), applied through
+Windhawk's styler mods and to the desktop icons:
+
+```powershell
+.\apply-look.ps1            # everything, one UAC prompt
+.\apply-look.ps1 -Restore   # puts the original desktop icons back
+```
+
+The system, the tokens and every piece are described in
+[`windhawk/README.md`](windhawk/README.md). Nothing of ours runs in the
+background, and nothing is loaded into the shell except by Windhawk.
+
+## The wallpaper-aware taskbar (earlier, not in use)
+
+The first version drove TranslucentTB from the wallpaper's colors. It worked,
+but TranslucentTB was too limited and was removed; the code stays here for
+reference.
+
+### How it works
 
 ```
 wallpaper changes ──> SaiyanGlass.exe (background, no window)
@@ -35,7 +58,7 @@ wallpaper changes ──> SaiyanGlass.exe (background, no window)
 - With a maximized window or with Start or search open, the glass gets a bit
   denser.
 
-## Build
+### Build
 
 Requires Visual Studio 2022+ or Build Tools with `VC.Tools.x86.x64` and a
 Windows 11 SDK.
@@ -45,7 +68,7 @@ Windows 11 SDK.
 .\build.ps1 -Install   # build and install for the current user
 ```
 
-## Install, restore, remove
+### Install, restore, remove
 
 | What | How |
 | --- | --- |
@@ -60,7 +83,7 @@ What SaiyanGlass changes on the system: its own files, the `HKCU\...\Run\SaiyanG
 value, two Start menu shortcuts, and TranslucentTB's `settings.json` (backed up
 first). It does not touch Windows personalization, the wallpapers or the slideshow.
 
-## Limits
+### Limits
 
 - The Start menu keeps Windows' own acrylic. Styling it would require loading
   code into StartMenuExperienceHost, which this project deliberately doesn't do.
@@ -69,7 +92,10 @@ first). It does not touch Windows personalization, the wallpapers or the slidesh
 
 ## Repository
 
-- `src/host`: background host and command line
+- `apply-look.ps1`: applies the look (Windhawk settings and desktop icons)
+- `windhawk`: the design tokens (`glass.ps1`) and one script per styler mod
+- `desktop`: the glass desktop icons
+- `src/host`: background host and command line (earlier version)
 - `src/settings`: settings window
 - `src/common`: settings file shared by both
 - `tools/measure.ps1`: performance measurement (CPU, memory, GPU of the shell processes)
