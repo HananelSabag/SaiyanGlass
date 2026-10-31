@@ -35,6 +35,10 @@ $Tokens = [ordered]@{
     RadiusRow       = 8     # rows: menu items, list items, tabs, nav items
     ItemSize        = 40    # the dock bubble's height, for the desktop icon's radius
     TextWeight      = 'SemiBold'
+    # File Explorer's window glass is Windows' own and can't take the tint:
+    # acrylic is see-through but its sidebar drops to about 2:1 over the
+    # brightest wallpapers; micaAlt is darker and readable everywhere, but opaque.
+    ExplorerBackdrop = 'acrylic'
     FontFamily      = 'Segoe UI Variable Text'
     # The desktop icon has no glass behind it, so its bubble brings its own: a
     # base of dark glass, fill and rim a third stronger, a sheen on the top

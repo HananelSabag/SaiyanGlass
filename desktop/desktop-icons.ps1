@@ -300,6 +300,7 @@ function New-GlassIcon([string]$id, [scriptblock]$render) {
 function Set-FolderIcon([string]$dir, [string]$ico) {
     $ini = Join-Path $dir 'desktop.ini'
     $lines = if ([IO.File]::Exists($ini)) { [IO.File]::ReadAllLines($ini) } else { @() }
+    $changed = -not ($lines -contains "IconResource=$ico,0")
     $out = New-Object Collections.Generic.List[string]
     $placed = $false
     foreach ($line in $lines) {
@@ -314,6 +315,9 @@ function Set-FolderIcon([string]$dir, [string]$ico) {
     # Explorer reads desktop.ini only for read-only or system folders.
     $folder = [IO.DirectoryInfo]$dir
     $folder.Attributes = $folder.Attributes -bor [IO.FileAttributes]::ReadOnly
+    # A folder holding PDFs or pictures can keep showing a cached thumbnail of
+    # its contents instead of the new icon; a new timestamp drops that entry.
+    if ($changed) { $folder.LastWriteTime = Get-Date }
     [GlassIcons]::NotifyPath($dir)
 }
 

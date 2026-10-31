@@ -15,7 +15,7 @@ $capsule = 'CornerRadius=16'  # half the 32px bar
 $overflow = 'CommandBarOverflowPresenter#SecondaryItemsControl > Grid#LayoutRoot'
 Set-WindhawkMod 'windows-11-file-explorer-styler' -Settings @{
     theme = 'LiquidGlass'
-    backgroundTranslucentEffect = 'acrylic'
+    backgroundTranslucentEffect = $Tokens.ExplorerBackdrop
     backgroundTranslucentEffectRegion = ''
 } -Constants @(
     "ElementBackground=$Bubble",

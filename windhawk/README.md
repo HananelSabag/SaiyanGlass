@@ -64,6 +64,27 @@ radius scaled to the icon (12 of 40px). The `$design` version in
 `desktop-icons.ps1` is part of each icon's file name; bump it after a change to
 the bubble so Explorer's icon cache can't keep the old one.
 
+### File Explorer's window
+
+The window behind the file list and the sidebar is Windows' own glass (the
+styler only picks which one), so the tokens can't tint it. `ExplorerBackdrop`
+picks it: `acrylic` (now) is see-through and matches the rest; on a bright sky
+wallpaper the file list measured 3.8-4.3:1 for white text, but the sidebar fell
+to 1.9:1 over snow. `micaAlt` is dark and readable on any wallpaper, but
+opaque. The tabs, address bar, search box and menus on top of it follow the
+tokens either way.
+
+## Checked
+
+Screenshots on 2026-10-31, on a bright sky wallpaper and over dark windows:
+the taskbar (dock bubbles and hover, capsules, the clock menu with the row hover
+bubble, tooltips, window previews, a jump list), Start (the panel, headers,
+category boxes, an open category, the account bar, search), quick settings,
+notifications, Alt+Tab, File Explorer, the right-click menu in Explorer and on
+the desktop, and the desktop icons. Left as Windows draws them: the off state of
+the quick settings tiles, the web results pane in search, and Windows' blue
+selection ring (Alt+Tab, keyboard focus).
+
 ## Pieces
 
 - `glass.ps1`: the tokens, the brushes built from them, style helpers
