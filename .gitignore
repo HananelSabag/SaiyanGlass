@@ -2,3 +2,7 @@ out/
 prototype/.cache/
 prototype/wallpapers.local.js
 *.pdb
+
+# Local-only: AI-agent notes, IDE settings and build outputs
+*.exp
+*.lib
